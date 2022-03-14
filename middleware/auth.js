@@ -6,9 +6,11 @@ module.exports = (req, res, next) => {
     const token = req.header('x-auth-token');
 
     // Check if there's a token
-    if (!token) return res.status(401).json({
-        msg: 'No token available, authorisation denied'
-    });
+    if (!token) {
+        return res.status(401).json({
+            msg: 'No token available, authorisation denied'
+        });
+    }
 
     // Verify token
     try {

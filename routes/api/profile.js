@@ -9,7 +9,7 @@ const {
 const Profile = require('../../models/Profile');
 const User = require('../../models/User');
 
-// @route   api/profile/me
+// @route   GET api/profile/me
 // @desc    Get current users profile
 // @access  Public
 
@@ -28,7 +28,7 @@ router.get("/me", auth, async (req, res) => {
     }
 });
 
-// @route   api/profile/
+// @route   POST api/profile/
 // @desc    Create or update user profile
 // @access  Private
 
@@ -116,7 +116,7 @@ router.post('/', [
 );
 
 
-// @route   api/profile/
+// @route   GET api/profile/
 // @desc    Get all profiles
 // @access  Public
 router.get('/', async (req, res) => {
@@ -130,7 +130,7 @@ router.get('/', async (req, res) => {
 });
 
 
-// @route   api/profile/user/:user_id
+// @route   GET api/profile/user/:user_id
 // @desc    Get profile by user ID
 // @access  Public
 router.get("/user/:user_id", async (req, res) => {
@@ -144,6 +144,38 @@ router.get("/user/:user_id", async (req, res) => {
         });
 
         res.json(profile);
+    } catch (error) {
+        console.error(error.message);
+
+        if (error.kind == 'ObjectId') {
+            return res.status(400).json({
+                msg: 'Profile not found'
+            })
+        }
+        res.status(500).send('Server Error')
+    }
+});
+
+// @route   DELETE api/profile/
+// @desc    Delete profile, user & posts
+// @access  Private
+router.delete("/", async (req, res) => {
+    try {
+        // @todo - remove users posts
+        // Remove Profile
+        await Profile.findOneAndRemove({
+            _id: req.user.id
+        });
+
+        // Remove User
+        await User.findOneAndRemove({
+            _id: req.user.id
+        });
+
+
+        res.json({
+            msg: 'User deleted'
+        });
     } catch (error) {
         console.error(error.message);
 
