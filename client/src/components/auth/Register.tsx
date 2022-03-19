@@ -1,6 +1,10 @@
+// import axios from 'axios';
 import axios from 'axios';
 import React from 'react';
 import { useState } from 'react';
+import { useMutation } from 'react-query';
+import { getNewUser, registerNewUser } from '../../http-common';
+// import { useRegisterQuery } from '../../queries/registerQuery';
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -9,44 +13,73 @@ const Register = () => {
     password: '',
     passwordVerification: '',
   });
+  // const { data, isLoading, error, status } = useRegisterQuery(formData);
+
+  const mutation = useMutation((userData: getNewUser) => {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
+
+    return axios.post('http://localhost:5001/api/users', userData, config);
+  });
+
+  console.log(mutation.isLoading, mutation.error, mutation.isSuccess);
 
   const { name, email, password, passwordVerification } = formData;
 
   const formChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
-  const formSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (password !== passwordVerification) {
-      console.log('Passwords do not match');
-    } else {
-      const newUser = {
-        name,
-        email,
-        password,
-      };
+  const FormSubmit = () =>
+    mutation.mutate({
+      name,
+      email,
+      password,
+    });
 
-      try {
-        const config = {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        };
+  // const FormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  //   e.preventDefault();
+  //   if (password !== passwordVerification) {
+  //     console.log('Passwords do not match');
+  //   } else {
+  //     // const newUser = {
+  //     //   name,
+  //     //   email,
+  //     //   password,
+  //     // };
 
-        const body = JSON.stringify(newUser);
-
-        const res = await axios.post('/api/users', body, config);
-        console.log(res.data);
-      } catch (error) {
-        console.error(error);
-      }
-    }
-  };
+  //     try {
+  //       // console.log(data, isLoading, status, error);
+  //       // const config = {
+  //       //   headers: {
+  //       //     'Content-Type': 'application/json',
+  //       //   },
+  //       // };
+  //       // const body = JSON.stringify(newUser);
+  //       // const res = await axios.post('/api/users', body, config);
+  //       // console.log(res.data);
+  //     } catch (error) {
+  //       console.error(error);
+  //     }
+  //   }
+  // };
   return (
     <section className='container'>
       <h1 className='display-2'>Sign Up</h1>
       <p className='lead'>Create an account!</p>
-      <form action='#' onSubmit={(e) => formSubmit(e)}>
+      <form
+        action='#'
+        onSubmit={(e) => {
+          e.preventDefault();
+          mutation.mutate({
+            name,
+            email,
+            password,
+          });
+        }}
+      >
         <div className='mb-3'>
           <label htmlFor='exampleInputName' className='form-label'>
             Name
