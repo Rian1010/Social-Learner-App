@@ -1,4 +1,6 @@
+# Social Learner App
 
+## Initial Process
 - `npm init`
 - Give a description 
 - author: name
