@@ -1,4 +1,3 @@
-// import axios from 'axios';
 import axios from 'axios';
 import React from 'react';
 import { useState } from 'react';
@@ -22,7 +21,7 @@ const Register = () => {
       },
     };
 
-    return axios.post('http://localhost:5001/api/users', userData, config);
+    return axios.post('/api/users', userData, config);
   });
 
   console.log(mutation.isLoading, mutation.error, mutation.isSuccess);
@@ -32,39 +31,6 @@ const Register = () => {
   const formChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
-  const FormSubmit = () =>
-    mutation.mutate({
-      name,
-      email,
-      password,
-    });
-
-  // const FormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-  //   e.preventDefault();
-  //   if (password !== passwordVerification) {
-  //     console.log('Passwords do not match');
-  //   } else {
-  //     // const newUser = {
-  //     //   name,
-  //     //   email,
-  //     //   password,
-  //     // };
-
-  //     try {
-  //       // console.log(data, isLoading, status, error);
-  //       // const config = {
-  //       //   headers: {
-  //       //     'Content-Type': 'application/json',
-  //       //   },
-  //       // };
-  //       // const body = JSON.stringify(newUser);
-  //       // const res = await axios.post('/api/users', body, config);
-  //       // console.log(res.data);
-  //     } catch (error) {
-  //       console.error(error);
-  //     }
-  //   }
-  // };
   return (
     <section className='container'>
       <h1 className='display-2'>Sign Up</h1>
