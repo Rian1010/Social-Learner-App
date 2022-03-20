@@ -6,16 +6,12 @@ export interface getNewUser {
   password: string;
 }
 
-export const registerNewUser = async (newUser: any) => {
+export const registerNewUser = async (userData: getNewUser) => {
   const config = {
     headers: {
       'Content-Type': 'application/json',
     },
   };
 
-  const body = JSON.stringify(newUser);
-
-  const res = await axios.post('/api/users', body, config);
-
-  return res;
+  return axios.post('/api/users', userData, config);
 };
