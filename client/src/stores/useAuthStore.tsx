@@ -4,11 +4,11 @@ import { combine } from 'zustand/middleware';
 export const useAuthStore = create(
   combine(
     {
-      payload: {},
+      payload: '',
       isAuthenticated: false,
     },
     (set) => ({
-      setPayload: (payload: object) => set({ payload }),
+      setPayload: (payload: string) => set({ payload }),
       setIsAuthenticated: (isAuthenticated: boolean) =>
         set({ isAuthenticated }),
     })

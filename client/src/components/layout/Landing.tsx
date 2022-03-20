@@ -1,12 +1,17 @@
+import axios from 'axios';
 import React from 'react';
+import { useQuery } from 'react-query';
 import { Link } from 'react-router-dom';
 import { useAuthStore } from '../../stores/useAuthStore';
+import jwt_decode from 'jwt-decode';
 
 const Landing: React.FC = () => {
   const { payload, isAuthenticated } = useAuthStore();
 
-  console.log(`user token: ${payload}`);
-  console.log(localStorage);
+  if (payload !== '') {
+    const decode = jwt_decode(payload);
+    console.log(decode);
+  }
 
   return (
     <section className='landing d-flex justify-content-center flex-column'>

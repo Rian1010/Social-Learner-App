@@ -5,6 +5,7 @@ import { useMutation } from 'react-query';
 import { Link, useNavigate } from 'react-router-dom';
 import { getNewUser } from '../../http-common';
 import { useAuthStore } from '../../stores/useAuthStore';
+import jwt_decode from 'jwt-decode';
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -30,6 +31,9 @@ const Login = () => {
       onSuccess: (data) => {
         setPayload(data.data.token);
         setIsAuthenticated(true);
+        const decode = jwt_decode(data.data.token);
+        console.log(decode);
+        console.log(typeof data.data.token);
         navigate('/');
       },
     }

@@ -9,6 +9,8 @@ const User = require('../../models/User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const config = require('config');
+const Profile = require('../../models/Profile');
+const Post = require('../../models/Post');
 
 // @route   POST api/users
 // @desc    Register user
@@ -71,8 +73,12 @@ router.post("/", [
         // Return jsonwebtoken
         const payload = {
             user: {
-                id: user.id
-            }
+                id: user.id,
+                name: user.name,
+                email: user.email,
+                avatar: user.avatar,
+                date: user.date
+            },
         }
 
         jwt.sign(payload, config.get('jwtSecret'), {
@@ -81,7 +87,7 @@ router.post("/", [
             if (err) throw err;
             res.json({
                 token
-            })
+            });
         });
 
         // res.send('User registered');

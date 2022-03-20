@@ -6,6 +6,7 @@ import Login from './components/auth/Login';
 import Register from './components/auth/Register';
 import Landing from './components/layout/Landing';
 import Navbar from './components/layout/Navbar';
+import Profile from './components/layout/Profile';
 
 const queryClient = new QueryClient();
 
@@ -17,6 +18,7 @@ const App = () => {
         <QueryClientProvider client={queryClient}>
           <Routes>
             <Route path='/' element={<Landing />} />
+            <Route path='/profile' element={<Profile />} />
 
             <Route path='/register' element={<Register />} />
             <Route path='/login' element={<Login />} />

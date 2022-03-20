@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const auth = require('../../middleware/auth');
 const User = require('../../models/User')
+const Profile = require('../../models/Profile');
 const jwt = require('jsonwebtoken');
 const config = require('config');
 const bcrypt = require('bcryptjs');
@@ -9,6 +10,7 @@ const {
     check,
     validationResult
 } = require('express-validator/check');
+const Post = require('../../models/Post');
 
 // @route   api/auth
 // @desc    Get user by token
@@ -46,6 +48,14 @@ router.post("/", [
             email
         });
 
+        let profile = await Profile.findOne({
+            user: user.id
+        });
+
+        let post = await Post.findOne({
+            user: user.id
+        });
+
         if (!user) {
             return res.status(400).json({
                 errors: [{
@@ -67,7 +77,30 @@ router.post("/", [
         // Return jsonwebtoken
         const payload = {
             user: {
-                id: user.id
+                id: user.id,
+                name: user.name,
+                email: user.email,
+                avatar: user.avatar,
+                date: user.date,
+            },
+            profile: {
+                _id: profile._id,
+                user: profile.user,
+                company: profile.company,
+                skills: profile.skills,
+                status: profile.status,
+                experience: profile.experience,
+                education: profile.education,
+                date: profile.date,
+            },
+            post: {
+                user: post.user,
+                name: post.name,
+                text: post.text,
+                avatar: post.avatar,
+                likes: post.likes,
+                comments: post.comments,
+                date: post.date,
             }
         }
 
@@ -77,9 +110,10 @@ router.post("/", [
             if (err) throw err;
             res.json({
                 token
-            })
-        });
+            });
 
+
+        });
         // res.send('User registered');
     } catch (err) {
         console.log(err.message)
