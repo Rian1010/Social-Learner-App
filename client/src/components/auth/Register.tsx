@@ -2,7 +2,10 @@ import axios from 'axios';
 import React, { Fragment } from 'react';
 import { useState } from 'react';
 import { useMutation } from 'react-query';
+import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { getNewUser } from '../../http-common';
+import { useAuthStore } from '../../stores/useAuthStore';
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -11,22 +14,30 @@ const Register = () => {
     password: '',
     passwordVerification: '',
   });
+  const navigate = useNavigate();
 
-  const mutation = useMutation((userData: getNewUser) => {
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
+  const { setPayload, setIsAuthenticated } = useAuthStore();
+
+  const mutation = useMutation(
+    (userData: getNewUser) => {
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      };
+
+      return axios.post('/api/users', userData, config);
+    },
+    {
+      onSuccess: (data) => {
+        setPayload(data.data.token);
+        setIsAuthenticated(true);
+        navigate('/');
       },
-    };
-
-    return axios.post('/api/users', userData, config);
-  });
-
-  console.log(
-    mutation.isLoading,
-    mutation.error,
-    mutation.isError,
-    mutation.isSuccess
+      onError: (error) => {
+        console.error(error);
+      },
+    }
   );
 
   const { name, email, password, passwordVerification } = formData;
@@ -50,12 +61,11 @@ const Register = () => {
           An error has occured!
         </div>
       ) : (
-        <p>all good</p>
+        <h1 className='display-2'>Sign Up</h1>
       )}
       <Fragment>
-        <h1 className='display-2'>Sign Up</h1>
         <p className='lead'>Create an account!</p>
-        <form action='#' onSubmit={(e) => formSubmit(e)}>
+        <form onSubmit={(e) => formSubmit(e)} method='POST'>
           <div className='mb-3'>
             <label htmlFor='exampleInputName' className='form-label'>
               Name
@@ -68,6 +78,7 @@ const Register = () => {
               aria-describedby='name'
               value={name}
               onChange={(e) => formChange(e)}
+              required
             />
           </div>
           <div className='mb-3'>
@@ -82,6 +93,7 @@ const Register = () => {
               aria-describedby='emailHelp'
               value={email}
               onChange={(e) => formChange(e)}
+              required
             />
             <div id='emailHelp' className='form-text'>
               We'll never share your email with anyone else.
@@ -98,6 +110,7 @@ const Register = () => {
               id='exampleInputPassword1'
               value={password}
               onChange={(e) => formChange(e)}
+              required
             />
           </div>
           <div className='mb-3'>
@@ -111,6 +124,7 @@ const Register = () => {
               id='exampleInputPasswordVerification'
               value={passwordVerification}
               onChange={(e) => formChange(e)}
+              required
             />
           </div>
           <div className='mb-3 form-check'>
@@ -133,6 +147,9 @@ const Register = () => {
             </button>
           )}
         </form>
+        <p>
+          Already have an account? <Link to='/login'>Login here!</Link>
+        </p>
       </Fragment>
     </section>
   );

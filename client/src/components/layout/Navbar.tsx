@@ -1,7 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useAuthStore } from '../../stores/useAuthStore';
 
 const Navbar: React.FC = () => {
+  const { isAuthenticated } = useAuthStore();
+
   return (
     <nav className='navbar navbar-dark bg-primary navbar-expand-lg'>
       <div className='container-fluid'>
@@ -26,16 +29,20 @@ const Navbar: React.FC = () => {
                 Developers
               </Link>
             </li>
-            <li className='nav-item'>
-              <Link className='nav-link' to='/register'>
-                Register
-              </Link>
-            </li>
-            <li className='nav-item'>
-              <Link className='nav-link' to='/login'>
-                Login
-              </Link>
-            </li>
+            {!isAuthenticated && (
+              <>
+                <li className='nav-item'>
+                  <Link className='nav-link' to='/register'>
+                    Register
+                  </Link>
+                </li>
+                <li className='nav-item'>
+                  <Link className='nav-link' to='/login'>
+                    Login
+                  </Link>
+                </li>
+              </>
+            )}
           </ul>
         </div>
       </div>

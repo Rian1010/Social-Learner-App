@@ -1,7 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useAuthStore } from '../../stores/useAuthStore';
 
 const Landing: React.FC = () => {
+  const { payload, isAuthenticated } = useAuthStore();
+
+  console.log(`user token: ${payload}`);
+  console.log(localStorage);
+
   return (
     <section className='landing d-flex justify-content-center flex-column'>
       <div className='container mt-0'>
@@ -12,12 +18,16 @@ const Landing: React.FC = () => {
               Create a profile, share posts, connect with people around the
               world!
             </p>
-            <Link to='/register' className='btn btn-primary'>
-              Register
-            </Link>
-            <Link to='/login' className='btn btn-light'>
-              Login
-            </Link>
+            {!isAuthenticated && (
+              <>
+                <Link to='/register' className='btn btn-primary'>
+                  Register
+                </Link>
+                <Link to='/login' className='btn btn-light'>
+                  Login
+                </Link>
+              </>
+            )}
           </div>
         </div>
       </div>

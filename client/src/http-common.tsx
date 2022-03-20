@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 export interface getNewUser {
-  name: string;
+  name?: string;
   email: string;
   password: string;
 }

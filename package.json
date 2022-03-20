@@ -23,7 +23,8 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.12.15",
     "react-router-dom": "^6.2.2",
-    "request": "^2.88.2"
+    "request": "^2.88.2",
+    "zustand": "^3.7.1"
   },
   "devDependencies": {
     "concurrently": "^6.2.0",
