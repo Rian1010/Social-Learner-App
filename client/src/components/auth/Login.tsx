@@ -3,7 +3,7 @@ import React, { Fragment } from 'react';
 import { useState } from 'react';
 import { useMutation } from 'react-query';
 import { Link, useNavigate } from 'react-router-dom';
-import { getNewUser } from '../../http-common';
+import { getNewUser } from '../../interfaces';
 import { useAuthStore } from '../../stores/useAuthStore';
 import jwt_decode from 'jwt-decode';
 
@@ -31,9 +31,6 @@ const Login = () => {
       onSuccess: (data) => {
         setPayload(data.data.token);
         setIsAuthenticated(true);
-        const decode = jwt_decode(data.data.token);
-        console.log(decode);
-        console.log(typeof data.data.token);
         navigate('/');
       },
     }

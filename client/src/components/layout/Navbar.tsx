@@ -3,7 +3,12 @@ import { Link } from 'react-router-dom';
 import { useAuthStore } from '../../stores/useAuthStore';
 
 const Navbar: React.FC = () => {
-  const { isAuthenticated } = useAuthStore();
+  const { setPayload, isAuthenticated, setIsAuthenticated } = useAuthStore();
+
+  const logout = () => {
+    setPayload('');
+    setIsAuthenticated(false);
+  };
 
   return (
     <nav className='navbar navbar-dark bg-primary navbar-expand-lg'>
@@ -25,19 +30,26 @@ const Navbar: React.FC = () => {
         <div className='collapse navbar-collapse' id='navbarSupportedContent'>
           <ul className='navbar-nav me-auto mb-2 mb-lg-0'>
             <li className='nav-item'>
-              <Link className='nav-link active' aria-current='page' to='/'>
+              <Link className='nav-link' aria-current='page' to='/'>
                 Home
               </Link>
             </li>
-            <li className='nav-item'>
-              <Link
-                className='nav-link active'
-                aria-current='page'
-                to='/profile'
-              >
-                Profile
-              </Link>
-            </li>
+            {isAuthenticated && (
+              <>
+                <li className='nav-item'>
+                  <Link className='nav-link' aria-current='page' to='/profile'>
+                    Profile
+                  </Link>
+                </li>
+
+                <li className='nav-item' onClick={() => logout()}>
+                  <Link className='nav-link' to='/login'>
+                    Logout
+                  </Link>
+                </li>
+              </>
+            )}
+
             {!isAuthenticated && (
               <>
                 <li className='nav-item'>

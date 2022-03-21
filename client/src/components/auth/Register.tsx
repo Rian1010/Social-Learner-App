@@ -4,9 +4,9 @@ import { useState } from 'react';
 import { useMutation } from 'react-query';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
-import { getNewUser } from '../../http-common';
 import { useAuthStore } from '../../stores/useAuthStore';
 import jwt_decode from 'jwt-decode';
+import { getNewUser } from '../../interfaces';
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -34,8 +34,7 @@ const Register = () => {
         setPayload(data.data.token);
         setIsAuthenticated(true);
         const decode = jwt_decode(data.data.token);
-        console.log(decode);
-        console.log(typeof data.data.token);
+        // console.log(decode);
         navigate('/');
       },
       onError: (error) => {
